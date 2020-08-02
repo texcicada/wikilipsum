@@ -1,0 +1,85 @@
+\usepackage{xparse}%for document command
+\usepackage{pgffor}%\foreach
+\usepackage{etoolbox}%\ifcsdef
+\usepackage{pgfmath}%for random function
+\newcommand{\wlrandom}{\pgfmathparse{random(\maxwikilipsum)}\pgfmathresult}
+\newcommand\wlrandoma{\wlrandom}
+\input{wikilipsum1.tex}%some text
+
+
+
+
+%============================================
+\newcommand\maxwikilipsum{189}
+
+%============================================
+\newcounter{loopparmcount}
+\newcommand\advlpcount{\stepcounter{loopparmcount}}
+
+
+
+%============================================ start and finish
+\newcommand\assignloopparm[1]{%
+%cycle the parm counter between 1 and 2 only
+\ifnum\theloopparmcount>1\relax\setcounter{loopparmcount}{0}\fi%
+%the next parm number (there are only ever two)
+\advlpcount
+%if start or finish already defined (from a previous invocation), renewcommand them with this invocation's values
+\ifcsdef{loopparm\theloopparmcount}%
+{\expandafter\renewcommand\csname loopparm\theloopparmcount\endcsname{#1}}%
+%\else%
+{\expandafter\newcommand\csname loopparm\theloopparmcount\endcsname{#1}}%
+%\fi
+%if there is only a start, set the finish to it: not required if start=finish.
+\ifcsdef{loopparm2}%
+{}%do nothing
+%\else
+{\expandafter\newcommand\csname loopparm2\endcsname{\csname loopparm1\endcsname}}%
+%\fi
+
+}
+
+%============================================
+\newcounter{loopparmstart}
+\newcounter{loopparmfinish}
+
+
+%============================================Print a lipsum
+\newcommand\lipsumwikipresep{}
+\newcommand\lipsumwikisep{\par}
+\newcommand\lipsumwikiqname{myqq}
+\newcommand\wikilipsum[1][2-2]{%
+\fooEw{#1}%
+\setcounter{loopparmstart}{\csname loopparm1\endcsname}
+\setcounter{loopparmfinish}{\csname loopparm2\endcsname}
+\foreach \x in {\theloopparmstart ,...,\theloopparmfinish}{\lipsumwikipresep\csname  		\lipsumwikiqname\x\endcsname\lipsumwikisep}
+}
+
+
+%============================================Print a random lipsum set
+\newcommand\arandomwl[1]{#1}
+%\newcommand\aqname[1]{#1}
+\newcommand\randomwikilipsum[1]{%
+%\renewcommand\arandomwl{\number\wlrandom}%
+%%\wlrandom%
+%%\foreach \x in {\wlrandom}{%
+%%\renewcommand\aqname{\lipsumwikiqname \x}
+%%%%%\lipsumwikipresep\csname\lipsumwikiqname\arandomwl\endcsname\lipsumwikisep%
+%%%%\csname \lipsumwikiqname \x\endcsname << %
+%%>>\csname\aqname\endcsname <<}%
+\foreach \x in {1,...,#1}{\pgfmathparse{random(\maxwikilipsum)}\lipsumwikipresep\csname myqq\pgfmathresult\endcsname\lipsumwikisep}
+}
+
+
+
+
+%---------------------------------
+\NewDocumentCommand \fooE
+{ > { \SplitList { ; } } m }
+{ \ProcessList {#1} { \assignloopparm } }
+
+%---------------------------------
+\NewDocumentCommand \fooEw
+{ > { \SplitList { - } } m }
+{ \ProcessList {#1} { \assignloopparm } }
+

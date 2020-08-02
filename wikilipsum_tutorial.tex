@@ -1,0 +1,97 @@
+\documentclass{article}
+
+\input{wikilipsum.tex}
+
+\newcommand\cmdwl[1]{\texttt{\textbackslash #1}}
+
+
+\begin{document}
+\begin{center}
+\bfseries wikilipsum\\
+ Tutorial
+\end{center}
+This package provides the \cmdwl{wikilipsum} command for printing lipsum-like stored text manually selected from (English-language) Wikipedia.\footnote{As at 2020-08-01.} 
+
+For usage, place the files  \texttt{wikilipsum.tex} (the commands) and \texttt{wikilipsum1.tex} (the texts) in a location where \TeX\ can find them, and then use 
+\begin{quotation}
+\texttt{\cmdwl{input}\{wikilipsum.tex\}} 
+\end{quotation}
+in the preamble to make the wikilipsum available.
+\bigskip
+
+\textbf{Default}
+
+Default setting (the command with no start and finish paragraph numbers) prints the second paragraph.
+
+\cmdwl{wikilipsum} produces:
+
+\begin{quotation}\sffamily\small
+\wikilipsum
+\end{quotation}
+\bigskip
+
+\textbf{Single Paragraph}
+
+Specifiying a paragraph number (maximum of \maxwikilipsum) as both \textit{start} and \textit{finish} prints just that paragraph.
+
+\cmdwl{wikilipsum[1-1]} produces:
+\begin{quotation}\sffamily\small
+\wikilipsum[1-1]
+\end{quotation}
+\bigskip
+
+\textbf{Range}
+
+Specifying a range of paragraphs ([\textit{start}-\textit{finish}]) prints the corresponding paragraphs.
+
+\cmdwl{wikilipsum[1-3]} produces:
+\begin{quotation}\sffamily\small
+\wikilipsum[1-3]
+\end{quotation}
+
+
+\textbf{Setting}
+
+Each paragraph text is preceded and followed by whatever code is stored in \cmdwl{lipsumwikipresep} and \cmdwl{lipsumwikisep}. Default code is nothing, and \cmdwl{par}, respectively. To print the paragraph range 1-3 as continuous text, for example, do:
+\begin{quotation}
+\texttt{\textbackslash renewcommand\textbackslash lipsumwikisep\{\}}\par
+\cmdwl{wikilipsum[1-3]}, which produces:\par
+\begin{quotation}\sffamily\small\renewcommand\lipsumwikisep{}\wikilipsum[1-3]\end{quotation}
+\end{quotation}
+
+\textbf{Backwards}
+
+The \textit{start} paragraph number can be higher than the \textit{finish}.
+\begin{quotation}
+\texttt{\textbackslash renewcommand\textbackslash lipsumwikipresep\{>> \}}\par
+\texttt{\textbackslash renewcommand\textbackslash lipsumwikisep\{ << (\textbackslash x)\textbackslash par\}\scriptsize{\%\textbackslash x=par num}}\par
+\cmdwl{wikilipsum[3-1]}\par produces:\par
+\begin{quotation}\sffamily\small
+\renewcommand\lipsumwikipresep{>> }
+\renewcommand\lipsumwikisep{ << (\x)\par}
+\wikilipsum[3-1]
+\end{quotation}
+\end{quotation}
+
+\textbf{Random}
+
+\cmdwl{randomwikilipsum\{x\}} will typeset a set of $x$ random paragraphs.
+
+\begin{quotation}
+\cmdwl{randomwikilipsum\{3\}}\par produced:\par
+\begin{quotation}\sffamily\small
+\randomwikilipsum{3}
+\end{quotation}
+\end{quotation}
+
+
+
+\bigskip
+\bigskip
+
+\hfill ***\hfill\ 
+
+\end{document}
+
+
+
